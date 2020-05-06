@@ -1,12 +1,19 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
+    <GlobalMenu></GlobalMenu>
     <router-view/>
   </div>
 </template>
+
+<script>
+import Vue from 'vue';
+import GlobalMenu from '@/components/GlobalMenu.vue';
+
+export default Vue.extend({
+  name: 'App',
+  components: { GlobalMenu },
+});
+</script>
 
 <style lang="scss">
 #app {
