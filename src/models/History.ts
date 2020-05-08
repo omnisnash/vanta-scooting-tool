@@ -1,3 +1,3 @@
 import GroupedData from './GroupedData';
 
-export type History = GroupedData[];
+export type AppHistory = GroupedData[];
