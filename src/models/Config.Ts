@@ -1,10 +1,5 @@
 export default interface AppConfiguration {
-    parsing: ParsingConfiguration;
     referencials: ReferencialsConfiguration;
-}
-
-export interface ParsingConfiguration {
-    groupField: string;
 }
 
 export interface ReferencialsConfiguration {
