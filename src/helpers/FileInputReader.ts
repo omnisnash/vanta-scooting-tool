@@ -1,19 +1,3 @@
-export function getFileFromFileInput(fileInputId: string): File | null {
-  const fileInput = document.getElementById(fileInputId) as HTMLInputElement;
-
-  if (!fileInput) {
-    throw new Error("File input form not found.");
-  }
-
-  const files = fileInput.files;
-
-  if (!files || files.length === 0) {
-    return null;
-  }
-
-  return files[0];
-}
-
 export function getFileExtension(file: File): string | null {
   if (!file) {
     throw new Error("No file provided");
