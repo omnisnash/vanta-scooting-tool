@@ -7,7 +7,7 @@ branches:
   - develop
   - "/^v\\d+\\.\\d+(\\.\\d+)?(-\\S*)?$/"
 before_script:
-  - npm install -g @vue/cli-init
+  - npm install -g @vue/cli
 script:
   - npm run build
 before_deploy: 
