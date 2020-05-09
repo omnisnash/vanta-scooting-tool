@@ -6,9 +6,12 @@ branches:
   - master
   - develop
   - "/^v\\d+\\.\\d+(\\.\\d+)?(-\\S*)?$/"
+before_script:
+  - npm install -g @vue/cli-init
 script:
-- npm run build
-before_deploy: cd dist
+  - npm run build
+before_deploy: 
+  - cd dist
 deploy:
   provider: heroku
   skin_cleanup: true
