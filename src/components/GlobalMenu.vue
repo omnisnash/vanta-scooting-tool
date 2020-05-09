@@ -5,14 +5,14 @@
         <div class="navbar-item">
           <div class="field has-addons">
             <p class="control">
-              <button class="button"
+              <button class="button is-large"
                 @click="newMesure"
                 :class="isCurrentRoute('New mesure')">
                   Nouvelle mesure
               </button>
             </p>
             <p class="control">
-              <button class="button"  @click="history" :class="isCurrentRoute('History')">
+              <button class="button is-large"  @click="history" :class="isCurrentRoute('History')">
                 <span class="icon is-small">
                   <i class="fas fa-history"></i>
                 </span>
@@ -23,7 +23,7 @@
       </div>
       <div class="navbar-end">
         <div class="navbar-item">
-          <button class="button" @click="settings" :class="isCurrentRoute('Settings')">
+          <button class="button is-large" @click="settings" :class="isCurrentRoute('Settings')">
             <span class="icon is-small">
               <i class="fas fa-cog"></i>
             </span>
