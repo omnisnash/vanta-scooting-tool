@@ -1,0 +1,17 @@
+{
+  "projects": {
+    "default": "vanta-scooting-tool"
+  },
+  "targets": {
+    "vanta-scooting-tool": {
+      "hosting": {
+        "production": [
+          "vanta-scooting-tool"
+        ],
+        "staging": [
+          "vanta-scooting-tool-staging"
+        ]
+      }
+    }
+  }
+}
