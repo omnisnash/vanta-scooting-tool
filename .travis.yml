@@ -10,11 +10,22 @@ before_script:
   - npm install -g @vue/cli
 script:
   - npm run build
+before_deploy:
+  - cd dist
 deploy:
-  provider: pages
-  skip_cleanup: true
-  github_token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
-  keep_history: true
-  local_dir: dist
-  on:
-    branch: master
+  - provider: firebase
+    skip_cleanup: true
+    token:
+      secure: "tTmzq7T+rJiqd/mk18qN8zoQRswqGi8I/UDwnPVZVHweHjl3MQ6HelwaGiZZ5Xrunu6TK8vQ9iJq95vdua4d1zACNiLiDV5KOPKRPBPesfKTmE+sOj9XpLTazY6/hlpPjqW0Dopwvj1PR5YfpfZJs3vz12jAS7RMF0SQkbAxg2Y/eublcB3CgHyWmk81c+c4LksKdzKPbuZJo8nZAx1eaZ5rl756+/GPOQ2LFcnmNCbMQJEFeBMi9Nt7gCwuvYbE4HmlYuvAN9wIZ+LIUo34Naw3QrrJIiREqUznSuDwOe5LSglUgra5iFLnyDlKJlkjxF7aoTMxoJAZkApWteJ9Iu2kZhXQ7LN7NbDS1TQll/IZ4RPA8bt+vg29BseBG6fCcYNNnjyXnUzE3kSj3MJPTBAiC52a05WgS3VEKAKlSse3VCGIEybF1up9tin6fD1dDML1pRiDn+mrDGntp21pyUbgJf55F28o/V+na+spxjeDH4Ki0X6COmmjmed4LuXSjpeVif1nTZQaSdJrXUinP4CEPUuUbViZ1E+Vjx9TeDfd1CXZ9gWfHHcXLNX7ruPNXpZrq1YEEuzJ+CcuOouR3tRolbBWZ1ML3LFlbQtOqK3QBrcu2kyR8Ygm+whTV1v7usRJ8pb2wx8WEHIjcGyUM76e2JHqywarlrHYQO93ItU="
+    local_dir: dist
+    project: vanta-scooting-tool
+    on:
+      branch: master
+  - provider: firebase
+    skip_cleanup: true
+    token:
+      secure: "tTmzq7T+rJiqd/mk18qN8zoQRswqGi8I/UDwnPVZVHweHjl3MQ6HelwaGiZZ5Xrunu6TK8vQ9iJq95vdua4d1zACNiLiDV5KOPKRPBPesfKTmE+sOj9XpLTazY6/hlpPjqW0Dopwvj1PR5YfpfZJs3vz12jAS7RMF0SQkbAxg2Y/eublcB3CgHyWmk81c+c4LksKdzKPbuZJo8nZAx1eaZ5rl756+/GPOQ2LFcnmNCbMQJEFeBMi9Nt7gCwuvYbE4HmlYuvAN9wIZ+LIUo34Naw3QrrJIiREqUznSuDwOe5LSglUgra5iFLnyDlKJlkjxF7aoTMxoJAZkApWteJ9Iu2kZhXQ7LN7NbDS1TQll/IZ4RPA8bt+vg29BseBG6fCcYNNnjyXnUzE3kSj3MJPTBAiC52a05WgS3VEKAKlSse3VCGIEybF1up9tin6fD1dDML1pRiDn+mrDGntp21pyUbgJf55F28o/V+na+spxjeDH4Ki0X6COmmjmed4LuXSjpeVif1nTZQaSdJrXUinP4CEPUuUbViZ1E+Vjx9TeDfd1CXZ9gWfHHcXLNX7ruPNXpZrq1YEEuzJ+CcuOouR3tRolbBWZ1ML3LFlbQtOqK3QBrcu2kyR8Ygm+whTV1v7usRJ8pb2wx8WEHIjcGyUM76e2JHqywarlrHYQO93ItU="
+    local_dir: dist
+    project: vanta-scooting-tool-staging
+    on:
+      branch: develop
