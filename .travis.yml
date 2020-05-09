@@ -10,20 +10,6 @@ before_script:
   - npm install -g @vue/cli
 script:
   - npm run build
-deploy:
-  - provider: firebase
-    skip_cleanup: true
-    token:
-      secure: "oILI29sxkkCZSGgrSOFtmrPIMODbjfogzQdQ95CeJKnr9RjjIU5habHcJzbUx4pwkvSoHtvbEdBXoqHmFyAobNK729tdfC20hl9pAYBfLLhmur1mH9Itabf2JoEvt91q9HvcZfjTp/AX71DzMEqG+qCr0y+jVgQVWKLZdIW1LKjlVJyO4cOVct9FeR2R8ZliUcbHVIGbWrRjfxaP/D0PE1PxJigTQTxOJL5R/wU9GnVDckZ0rtj+yGQO9v/5oDz9huoC4Y/jytB3MeIxi0cBq17JDshTY1otoyN+A4TZok5EY5fTMbUcKLYeuydk8Cmwj52BAoNqGuClscZ9k1ljTp9WbGg7EEvfLLyTEnH0YHi8sSVWx/I7itNqatqDGtreUi2y62ZtvbemVD6QC3cOeOahJUierlrW0yN1+txIb+4dtEGvqqM1dJS6XO/3lA1JqFB3Ifu/58tk/NZnZOFnQxSyGTfnWk33J10rFioKoakOr8mlxT2rXiM3KTKQfs/KSWWmQeq4QXv8JKYLS3Jl7lNWte1al5D+xmq5TrfQP09dUl1bEPO84DZ1uWTEj4tiDdUdb/GW1aATjK6A9JsSi5tslLi4WL3ZhRbyTNchUZU0wRTNmYJ7ig2eCIbXiDGe0SI5wzDJooB4wo/1G/OcWvReihhE7oselRpvUFdvArc="
-    local_dir: dist
-    project: vanta-scooting-tool
-    on:
-      branch: master
-  - provider: firebase
-    skip_cleanup: true
-    token:
-      secure: "tTmzq7T+rJiqd/mk18qN8zoQRswqGi8I/UDwnPVZVHweHjl3MQ6HelwaGiZZ5Xrunu6TK8vQ9iJq95vdua4d1zACNiLiDV5KOPKRPBPesfKTmE+sOj9XpLTazY6/hlpPjqW0Dopwvj1PR5YfpfZJs3vz12jAS7RMF0SQkbAxg2Y/eublcB3CgHyWmk81c+c4LksKdzKPbuZJo8nZAx1eaZ5rl756+/GPOQ2LFcnmNCbMQJEFeBMi9Nt7gCwuvYbE4HmlYuvAN9wIZ+LIUo34Naw3QrrJIiREqUznSuDwOe5LSglUgra5iFLnyDlKJlkjxF7aoTMxoJAZkApWteJ9Iu2kZhXQ7LN7NbDS1TQll/IZ4RPA8bt+vg29BseBG6fCcYNNnjyXnUzE3kSj3MJPTBAiC52a05WgS3VEKAKlSse3VCGIEybF1up9tin6fD1dDML1pRiDn+mrDGntp21pyUbgJf55F28o/V+na+spxjeDH4Ki0X6COmmjmed4LuXSjpeVif1nTZQaSdJrXUinP4CEPUuUbViZ1E+Vjx9TeDfd1CXZ9gWfHHcXLNX7ruPNXpZrq1YEEuzJ+CcuOouR3tRolbBWZ1ML3LFlbQtOqK3QBrcu2kyR8Ygm+whTV1v7usRJ8pb2wx8WEHIjcGyUM76e2JHqywarlrHYQO93ItU="
-    local_dir: dist
-    project: vanta-scooting-tool-staging
-    on:
-      branch: develop
+after_success:
+  - test $TRAVIS_BRANCH = "master" && firebase deploy --only hosting:production --token $FIREBASE_TOKEN
+  - test $TRAVIS_BRANCH = "develop" && firebase deploy --only hosting:staging --token $FIREBASE_TOKEN
