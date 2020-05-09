@@ -1,0 +1,19 @@
+language: node_js
+node_js:
+- '13'
+branches:
+  only:
+  - master
+  - develop
+  - "/^v\\d+\\.\\d+(\\.\\d+)?(-\\S*)?$/"
+script:
+- npm run build
+before_install: cd dist
+deploy:
+  provider: heroku
+  skin_cleanup: true
+  api_key:
+    secure: b8Wl8A4Qla8KqfMJKWnezTHqfDQrPynCzzZa3BwQ4JAf5jxQ2yu0A4Km3GUyvXxvb8O4/GNabz2sI4iMtxsL5A4PM8ZtSiObxmhWxwYfMbMR7FodrjtQLdtfAijJNizo1YU0Ie3bU0cKDpVffs911GbW6ALDdoHLoZ4Ws/x0U76NGsx1eQcBLCVAKoKx7hMMq2OQC0dp2U2g6EDvlvHxwb9hSPfekzcUNfeHaNC7tQgsgwSe76RrqbJhQNwUW4h8EmX5DTaGn3G24clm5d0zh0Gx7UnYdYF9bABPZGqsEw/yzwCI2SmdhlrY7d686ihIcbzl52vNOfnT+KZe7X6+ZsRGY6Etlylkdngf7Ad5necZKF3jZfxnXmxjPIa4ywQL3UaiDeV0gG5N3IYcBQo87Q5OBMnaEib8Vfy/h+2R1h00rFyraDsbD2Q/u8HoFbR8JVBw5qbMOfEvLHoUm2K8YnuUSyLwCNuUGLuXPBS1PvJGuKjM0onzcsNvoTjvke3VKcGI3Tcxj0hELlAeAeKMEKfd2gxSYBxeY7o5wyWQw3QqL10gbhIaOQN0pq7Zpe4L0ygHBeyXEI/pqbyAc/oIfbqBSTBaa7bNhpuzpkm25Fk8Cfvy3sFsTSd8fMYTj53OM4v6dSoj6cS9z1qc/RLulzjVC/a0sSPwLa7msz8yNeI=
+  app:
+      master: vanta-scooting-tool
+      develop: vanta-scooting-tool-staging
