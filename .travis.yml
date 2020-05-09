@@ -10,8 +10,6 @@ before_script:
   - npm install -g @vue/cli
 script:
   - npm run build
-before_deploy:
-  - cd dist
 deploy:
   - provider: firebase
     skip_cleanup: true
