@@ -1,0 +1,8 @@
+.history {
+  box-sizing: border-box;
+  padding: 15px;
+}
+
+.history th {
+  vertical-align: middle !important;
+}

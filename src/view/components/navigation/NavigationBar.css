@@ -1,0 +1,6 @@
+nav {
+  background-color: #2f2f2f;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+}
