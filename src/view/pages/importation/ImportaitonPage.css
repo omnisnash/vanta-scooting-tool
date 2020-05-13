@@ -1,0 +1,15 @@
+.import-container {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 25px;
+  box-sizing: border-box;
+}
+
+.import-content {
+  padding: 20px;
+  box-sizing: border-box;
+  min-width: 600px;
+  max-width: 600px;
+}

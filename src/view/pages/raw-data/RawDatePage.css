@@ -1,0 +1,64 @@
+.raw-data-container {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.measures-table-container {
+  overflow: auto;
+  flex: 1;
+}
+
+.measures-table-container th,
+td {
+  text-align: center !important;
+  vertical-align: middle !important;
+  min-width: 100px;
+}
+
+.measures-table-container tbody th {
+  position: -webkit-sticky; /* for Safari */
+  position: sticky;
+  left: 0;
+  box-shadow: inset 0px 0px 9999px rgb(255, 255, 255);
+  z-index: 1;
+}
+
+.measures-table-container thead th {
+  position: -webkit-sticky; /* for Safari */
+  position: sticky;
+  top: 0;
+  box-shadow: inset 0px 0px 9999px rgb(236, 236, 236);
+  z-index: 2;
+}
+
+.measures-table-container .error {
+  color: rgb(128, 0, 0);
+  font-size: 0.8em;
+}
+
+.measures-table-container .value {
+  font-weight: bold;
+}
+
+.measures-table-container .lod {
+  color: #aaaaaa;
+  font-size: 0.8em;
+  background: #fbfbfb;
+  padding: 2px 1px;
+  border-radius: 2px;
+  border: 1px solid #eeeeee;
+}
+
+.measures-table-container .is-ignored {
+  opacity: 0.1;
+}
+
+.report-table-container th,
+td {
+  text-align: center !important;
+  vertical-align: middle !important;
+  min-width: 100px;
+}
