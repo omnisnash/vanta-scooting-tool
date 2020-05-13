@@ -1,0 +1,18 @@
+{
+  "hosting": [
+    {
+      "target": "production",
+      "public": "build",
+      "headers": [
+        {"source": "/service-worker.js", "headers": [{"key": "Cache-Control", "value": "no-cache"}]}
+      ]
+    },
+    {
+      "target": "staging",
+      "public": "build",
+      "headers": [
+        {"source": "/service-worker.js", "headers": [{"key": "Cache-Control", "value": "no-cache"}]}
+      ]
+    }
+  ]
+}

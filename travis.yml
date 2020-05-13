@@ -1,0 +1,16 @@
+language: node_js
+node_js:
+- '13'
+branches:
+  only:
+  - master
+  - develop
+  - "/^v\\d+\\.\\d+(\\.\\d+)?(-\\S*)?$/"
+before_script:
+  - npm install -g firebase-tools
+  - npm install -g react-scripts
+script:
+  - npm run build
+after_success:
+  - test $TRAVIS_BRANCH = "master" && firebase deploy --only hosting:production --token $FIREBASE_TOKEN
+  - test $TRAVIS_BRANCH = "develop" && firebase deploy --only hosting:staging --token $FIREBASE_TOKEN
