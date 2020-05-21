@@ -194,9 +194,12 @@ export default function getAggregatedData(
       );
     });
 
-    aggregatedGroups.push(
-      aggregateGroup(group, appConfiguration, useErrorForReferential)
-    );
+    const aggregatedGroup = aggregateGroup(group, appConfiguration, useErrorForReferential);
+
+    // Only keep group with measures
+    if (aggregatedGroup.measureCount) {
+      aggregatedGroups.push(aggregatedGroup);
+    }
   }
 
   return {

@@ -42,19 +42,19 @@ interface HistoryItemProps {
 function HistoryItem(props: HistoryItemProps) {
   return (
     <tr>
-      <th>{props.group.name} </th>
-      <th>{props.group.createdAt.toLocaleString()}</th>
-      <th>
+      <td>{props.group.name} </td>
+      <td>{props.group.createdAt.toLocaleString()}</td>
+      <td>
         {props.group.updatedAt ? props.group.updatedAt.toLocaleString() : "-"}
-      </th>
-      <th>
+      </td>
+      <td>
         <button
           className={"button is-link is-large"}
           onClick={props.onImportModel}
         >
           Importer
         </button>
-      </th>
+      </td>
     </tr>
   );
 }

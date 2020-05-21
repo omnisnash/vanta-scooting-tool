@@ -120,6 +120,7 @@ class App extends Component<{}, AppState> {
           onFullscreen={this.handleFullscreen}
           isFullscreenEnabled={this.state.isFullScreen}
           enableDataAndReport={!!this.state.currentModel}
+          currentPage={this.state.currentPage}
         />
         <section className="main-container">
           <article className="page-content">{this.generateContent()}</article>
