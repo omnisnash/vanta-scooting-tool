@@ -16,6 +16,7 @@ interface NavigationBarProps {
   onFullscreen: () => void;
   enableDataAndReport: boolean;
   isFullscreenEnabled: boolean;
+  currentPage: PagesView;
 }
 
 function NavigationBar(props: NavigationBarProps) {
@@ -25,7 +26,7 @@ function NavigationBar(props: NavigationBarProps) {
         <div className="field has-addons buttons are-large">
           <p className="control">
             <button
-              className="button is-success"
+              className={"button " + (props.currentPage === PagesView.IMPORT ? "is-info" : "")}
               onClick={() => props.onPageSelected(PagesView.IMPORT)}
             >
               <span className="icon is-small">
@@ -36,7 +37,7 @@ function NavigationBar(props: NavigationBarProps) {
           </p>
           <p className="control">
             <button
-              className="button"
+              className={"button " + (props.currentPage === PagesView.HISTORY ? "is-info" : "")}
               onClick={() => props.onPageSelected(PagesView.HISTORY)}
             >
               <span className="icon is-small">
@@ -50,7 +51,7 @@ function NavigationBar(props: NavigationBarProps) {
         <div className="field has-addons buttons are-large">
           <p className="control">
             <button
-              className="button"
+              className={"button " + (props.currentPage === PagesView.RAW ? "is-info" : "")}
               onClick={() => props.onPageSelected(PagesView.RAW)}
               disabled={!props.enableDataAndReport}
             >
@@ -62,7 +63,7 @@ function NavigationBar(props: NavigationBarProps) {
           </p>
           <p className="control">
             <button
-              className="button"
+              className={"button " + (props.currentPage === PagesView.REPORT ? "is-info" : "")}
               onClick={() => props.onPageSelected(PagesView.REPORT)}
               disabled={!props.enableDataAndReport}
             >
