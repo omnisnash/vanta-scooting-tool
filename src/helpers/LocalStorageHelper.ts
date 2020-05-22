@@ -5,6 +5,43 @@ import GroupedData from "../models/GroupedData";
 const HISTORY_MAX_ITEM = 10;
 const KEY_CONFIG = "app-configuration";
 const KEY_HISTORY = "app-history";
+const KEY_SCROLL = "app-scroll";
+
+export interface ScrollPosition {
+  top: number;
+  left: number;
+}
+
+export function getStoredScrollPosition(positionId: string): ScrollPosition {
+  const value = localStorage.getItem(KEY_SCROLL);
+
+  if (!value) {
+    return {top: 0, left: 0};
+  }
+
+  const positions = new Map<string, ScrollPosition>(JSON.parse(value));
+  const scrollPosition = positions.get(positionId);
+
+  if (!scrollPosition) {
+    return {top: 0, left: 0};
+  }
+
+  return scrollPosition;
+}
+
+export function setScrollPosition(positionId: string, scrollPosition: ScrollPosition) {
+  const value = localStorage.getItem(KEY_SCROLL);
+  
+  const map: Map<string, ScrollPosition> = value ? new Map(JSON.parse(value)) : new Map();
+  
+  map.set(positionId, scrollPosition)
+
+  localStorage.setItem(KEY_SCROLL, JSON.stringify(Array.from(map.entries())));
+}
+
+export function resetScrollPositions() {
+  localStorage.removeItem(KEY_SCROLL);
+}
 
 export function getStoredAppConfiguration(): AppConfiguration {
   const value = localStorage.getItem(KEY_CONFIG);

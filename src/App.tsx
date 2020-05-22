@@ -10,6 +10,7 @@ import {
   getStoredAppHistory,
   addMeasurerToHistory,
   getStoredAppConfiguration,
+  resetScrollPositions,
 } from "./helpers/LocalStorageHelper";
 import RawDatePage from "./view/pages/raw-data/RawDataPage";
 import ReportPage from "./view/pages/report/ReportPage";
@@ -63,6 +64,8 @@ class App extends Component<{}, AppState> {
   };
 
   handleGroupedDataImport = (model: GroupedData) => {
+    resetScrollPositions();
+    
     this.setState({
       currentModel: model,
       currentPage: PagesView.RAW,

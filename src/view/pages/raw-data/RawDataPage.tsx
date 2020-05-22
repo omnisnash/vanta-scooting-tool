@@ -6,6 +6,9 @@ import GroupedData, {
 } from "../../../models/GroupedData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBan } from "@fortawesome/free-solid-svg-icons";
+import { getStoredScrollPosition, setScrollPosition } from "../../../helpers/LocalStorageHelper";
+
+const SCROLL_ID = "raw-table";
 
 interface RawDatePageProps {
   onIgnoreMeasure: (group: string, id: number) => void;
@@ -29,6 +32,33 @@ class RawDatePage extends Component<RawDatePageProps, IRawDatePageStates> {
     this.props.onSelectGroup(group.name);
     this.setState({ selectedGroup: group });
   };
+
+  componentDidMount() {
+    const tableContainer = document.getElementById("measures-table-container");
+
+    if (!tableContainer) {
+      return;
+    }
+
+    const scrollPosition = getStoredScrollPosition(SCROLL_ID);
+
+    if (!scrollPosition) {
+      return;
+    }
+
+    tableContainer.scrollLeft = scrollPosition.left;
+    tableContainer.scrollTop = scrollPosition.top;
+  }
+
+  componentWillUnmount() {
+    const tableContainer = document.getElementById("measures-table-container");
+
+    if (!tableContainer) {
+      return;
+    }
+
+    setScrollPosition(SCROLL_ID, {top: tableContainer.scrollTop, left: tableContainer.scrollLeft});
+  }
 
   render() {
     if (!this.props.groupedData) {
@@ -66,7 +96,7 @@ class RawDatePage extends Component<RawDatePageProps, IRawDatePageStates> {
           <ul>{tabs}</ul>
         </div>
 
-        <div className="measures-table-container">
+        <div id="measures-table-container">
           <MeasuresTable
             groupName={selectedGroupName}
             measures={selectedGroup.measures}

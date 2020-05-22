@@ -12,6 +12,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import GroupedData from "../../../models/GroupedData";
 import getAggregatedData from "../../../helpers/AggragationHelper";
 import html2canvas from "html2canvas";
+import { setScrollPosition, getStoredScrollPosition } from "../../../helpers/LocalStorageHelper";
+
+const SCROLL_ID = "report-table";
 
 interface ReportPageProps {
   onUseErrorForReferencial: () => void;
@@ -47,6 +50,33 @@ class ReportPage extends Component<ReportPageProps, ReportPageStates> {
   exportReportAsImage = () => {
     this.setState({ exportStatus: ExportStatus.IN_PROGRESS });
   };
+
+  componentDidMount() {
+    const tableContainer = document.getElementById("report-table-container");
+
+    if (!tableContainer) {
+      return;
+    }
+
+    const scrollPosition = getStoredScrollPosition(SCROLL_ID);
+
+    if (!scrollPosition) {
+      return;
+    }
+
+    tableContainer.scrollLeft = scrollPosition.left;
+    tableContainer.scrollTop = scrollPosition.top;
+  }
+
+  componentWillUnmount() {
+    const tableContainer = document.getElementById("report-table-container");
+
+    if (!tableContainer) {
+      return;
+    }
+
+    setScrollPosition(SCROLL_ID, {top: tableContainer.scrollTop, left: tableContainer.scrollLeft});
+  }
 
   componentDidUpdate() {
     // Handle table exportation
