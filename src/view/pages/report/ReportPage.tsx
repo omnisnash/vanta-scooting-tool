@@ -2,10 +2,16 @@ import React, { Component } from "react";
 import "./ReportPage.css";
 import AggregatedData from "../../../models/AggregatedData";
 import AppConfiguration, { ReferentialPerValue } from "../../../models/Config";
-import { faToggleOff, faToggleOn } from "@fortawesome/free-solid-svg-icons";
+import {
+  faToggleOff,
+  faToggleOn,
+  faDownload,
+  faFileExport,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import GroupedData from "../../../models/GroupedData";
 import getAggregatedData from "../../../helpers/AggragationHelper";
+import html2canvas from "html2canvas";
 
 interface ReportPageProps {
   onUseErrorForReferencial: () => void;
@@ -16,13 +22,64 @@ interface ReportPageProps {
   displayConditionnalFormatting?: boolean;
 }
 
-interface ReportPageStates {}
+enum ExportStatus {
+  NONE,
+  IN_PROGRESS,
+  DONE,
+  ERROR,
+}
+
+interface ReportPageStates {
+  exportStatus: ExportStatus;
+}
 
 class ReportPage extends Component<ReportPageProps, ReportPageStates> {
+  private exportResult: HTMLCanvasElement | undefined;
+
   constructor(props: ReportPageProps) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      exportStatus: ExportStatus.NONE,
+    };
+  }
+
+  exportReportAsImage = () => {
+    this.setState({ exportStatus: ExportStatus.IN_PROGRESS });
+  };
+
+  componentDidUpdate() {
+    // Handle table exportation
+    if (this.state.exportStatus === ExportStatus.IN_PROGRESS) {
+      const tableContainer = document.getElementById("report-table-container");
+      const table = document.getElementById("report-table");
+
+      // We need to set the scroll to 0, else a transparent white background appear on the exported image
+      let containerScrollLeft: number, containerScrollTop: number;
+
+      if (!tableContainer || !table) {
+        this.setState({ exportStatus: ExportStatus.ERROR });
+        console.error("Table or table container were not found.")
+        return;
+      }
+
+      tableContainer.scrollTop = 0;
+      tableContainer.scrollLeft = 0;
+
+      html2canvas(table)
+        .then((canvas) => {
+          this.exportResult = canvas;
+
+          tableContainer.scrollTop = containerScrollTop;
+          tableContainer.scrollLeft = containerScrollLeft;
+
+          this.setState({ exportStatus: ExportStatus.DONE });
+        })
+        .catch((error) => {
+          console.error(error);
+          this.setState({ exportStatus: ExportStatus.ERROR });
+        });
+    }
   }
 
   render() {
@@ -68,7 +125,9 @@ class ReportPage extends Component<ReportPageProps, ReportPageStates> {
           <ElementPerGroupTd
             aggregatedData={aggregatedData}
             element={element}
-            displayConditionnalFormatting={this.props.displayConditionnalFormatting}
+            displayConditionnalFormatting={
+              this.props.displayConditionnalFormatting
+            }
           />
         </tr>
       );
@@ -79,6 +138,14 @@ class ReportPage extends Component<ReportPageProps, ReportPageStates> {
 
     return (
       <div className="report-container">
+        {this.state.exportStatus !== ExportStatus.NONE && (
+          <ExportModal
+            onClose={() => this.setState({ exportStatus: ExportStatus.NONE })}
+            canvas={this.exportResult}
+            exportStatus={this.state.exportStatus}
+            fileName={aggregatedData.name}
+          />
+        )}
         <div className="report-header">
           <div className="report-title">
             <h1 className="title">{aggregatedData.name}</h1>
@@ -105,10 +172,10 @@ class ReportPage extends Component<ReportPageProps, ReportPageStates> {
             </h2>
           </div>
 
-          <div className="report-buttons">
-          <button
+          <div className="report-buttons buttons are-medium">
+            <button
               className={
-                "button is-medium " +
+                "button " +
                 (useConditionnalFormatting ? "is-link" : "is-outlined")
               }
               onClick={this.props.onUseConditionnalFormatting}
@@ -122,8 +189,7 @@ class ReportPage extends Component<ReportPageProps, ReportPageStates> {
             </button>
             <button
               className={
-                "button is-medium " +
-                (useErrorForReferential ? "is-link" : "is-outlined")
+                "button " + (useErrorForReferential ? "is-link" : "is-outlined")
               }
               onClick={this.props.onUseErrorForReferencial}
               disabled={!useConditionnalFormatting}
@@ -135,11 +201,24 @@ class ReportPage extends Component<ReportPageProps, ReportPageStates> {
               </span>
               <span>Utliser l'erreur</span>
             </button>
+            <button className={"button"} onClick={this.exportReportAsImage}>
+              <span className="icon is-small">
+                <FontAwesomeIcon icon={faFileExport} />
+              </span>
+              <span>Exporter</span>
+            </button>
           </div>
         </div>
 
-        <div className={"report-table-container"}>
-          <table className="table is-bordered is-fullwidth">
+        <div
+          id={"report-table-container"}
+          className={
+            this.state.exportStatus === ExportStatus.NONE
+              ? "enabled-sticky"
+              : ""
+          }
+        >
+          <table id="report-table" className="table is-bordered is-fullwidth">
             <thead>
               <tr>
                 <th></th>
@@ -202,11 +281,15 @@ function ElementPerGroupTd(props: {
       <td
         key={group.id}
         className={
-          concentration?.closeToNextReferential && props.displayConditionnalFormatting
+          concentration?.closeToNextReferential &&
+          props.displayConditionnalFormatting
             ? "is-near-next-referential"
             : ""
         }
-        data-referential={props.displayConditionnalFormatting && concentration?.associatedReferential}
+        data-referential={
+          props.displayConditionnalFormatting &&
+          concentration?.associatedReferential
+        }
       >
         <b>
           <span className={style}>{value}</span>
@@ -220,6 +303,66 @@ function ElementPerGroupTd(props: {
   });
 
   return <React.Fragment>{measurePerGroup}</React.Fragment>;
+}
+
+interface ExportModalProps {
+  onClose: () => void;
+  canvas?: HTMLCanvasElement;
+  exportStatus: ExportStatus;
+  fileName: string;
+}
+
+function ExportModal(props: ExportModalProps) {
+  return (
+    <div className="modal is-active">
+      <div className="modal-background"></div>
+      <div className="modal-card">
+        <header className="modal-card-head">
+          <p className="modal-card-title">Exporter le rapport</p>
+        </header>
+        <section className="modal-card-body">
+          {props.exportStatus === ExportStatus.IN_PROGRESS && (
+            <div>
+              <button className="button is-loading is-fullwidth is-large"></button>
+            </div>
+          )}
+
+          {props.exportStatus === ExportStatus.DONE && props.canvas && (
+            <div className={"preview"}>
+              <img src={props.canvas.toDataURL()} alt={"Export"} />
+            </div>
+          )}
+
+          {(props.exportStatus === ExportStatus.ERROR ||
+            (props.exportStatus === ExportStatus.DONE && !props.canvas)) && (
+            <p>Erreur lors de l'exportation</p>
+          )}
+        </section>
+        <footer className="modal-card-foot">
+          <button
+            className="button is-large"
+            onClick={props.onClose}
+            disabled={props.exportStatus === ExportStatus.IN_PROGRESS}
+          >
+            Fermer
+          </button>
+          {props.exportStatus === ExportStatus.DONE && props.canvas && (
+            <a
+              download={props.fileName + ".jpg"}
+              href={props.canvas.toDataURL("image/jpeg")}
+            >
+              <button className={"button is-large is-info"}>
+                <span className="icon is-small">
+                  <FontAwesomeIcon icon={faDownload} />
+                </span>
+                <span>Enregistrer l'image</span>
+              </button>
+            </a>
+          )}
+        </footer>
+      </div>
+    </div>
+  );
 }
 
 export default ReportPage;
