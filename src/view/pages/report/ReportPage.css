@@ -118,4 +118,9 @@ td[data-referential="D"] {
 .report-buttons {
   display: flex;
   align-items: center;
+  column-gap: 5px;
+}
+
+.report-button .button {
+  margin-left: 5px;
 }

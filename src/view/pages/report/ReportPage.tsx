@@ -9,9 +9,11 @@ import getAggregatedData from "../../../helpers/AggragationHelper";
 
 interface ReportPageProps {
   onUseErrorForReferencial: () => void;
+  onUseConditionnalFormatting: () => void;
   groupedData?: GroupedData;
   appConfiguration: AppConfiguration;
   useErrorForReferential?: boolean;
+  displayConditionnalFormatting?: boolean;
 }
 
 interface ReportPageStates {}
@@ -66,12 +68,14 @@ class ReportPage extends Component<ReportPageProps, ReportPageStates> {
           <ElementPerGroupTd
             aggregatedData={aggregatedData}
             element={element}
+            displayConditionnalFormatting={this.props.displayConditionnalFormatting}
           />
         </tr>
       );
     });
 
     const useErrorForReferential = this.props.useErrorForReferential;
+    const useConditionnalFormatting = this.props.displayConditionnalFormatting;
 
     return (
       <div className="report-container">
@@ -102,12 +106,27 @@ class ReportPage extends Component<ReportPageProps, ReportPageStates> {
           </div>
 
           <div className="report-buttons">
+          <button
+              className={
+                "button is-medium " +
+                (useConditionnalFormatting ? "is-link" : "is-outlined")
+              }
+              onClick={this.props.onUseConditionnalFormatting}
+            >
+              <span className="icon is-small">
+                <FontAwesomeIcon
+                  icon={useConditionnalFormatting ? faToggleOn : faToggleOff}
+                />
+              </span>
+              <span>Coloration</span>
+            </button>
             <button
               className={
                 "button is-medium " +
                 (useErrorForReferential ? "is-link" : "is-outlined")
               }
               onClick={this.props.onUseErrorForReferencial}
+              disabled={!useConditionnalFormatting}
             >
               <span className="icon is-small">
                 <FontAwesomeIcon
@@ -163,6 +182,7 @@ function ReferencialValuesTd(props: { values?: ReferentialPerValue | null }) {
 function ElementPerGroupTd(props: {
   aggregatedData: AggregatedData;
   element: string;
+  displayConditionnalFormatting?: boolean;
 }) {
   const measurePerGroup = props.aggregatedData.aggregatedgroups.map((group) => {
     const concentration = group.concentrations.find(
@@ -182,11 +202,11 @@ function ElementPerGroupTd(props: {
       <td
         key={group.id}
         className={
-          concentration?.closeToNextReferential
+          concentration?.closeToNextReferential && props.displayConditionnalFormatting
             ? "is-near-next-referential"
             : ""
         }
-        data-referential={concentration?.associatedReferential}
+        data-referential={props.displayConditionnalFormatting && concentration?.associatedReferential}
       >
         <b>
           <span className={style}>{value}</span>

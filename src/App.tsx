@@ -21,6 +21,7 @@ interface AppState {
   currentModel?: GroupedData;
   isFullScreen: boolean;
   useErrorForReferential: boolean;
+  displayConditionnalFormatting: boolean;
   selectedGroup?: string;
   updateAvalaible?: boolean;
   hideUpdate: boolean;
@@ -36,6 +37,7 @@ class App extends Component<{}, AppState> {
       currentPage: PagesView.IMPORT,
       isFullScreen: false,
       useErrorForReferential: true,
+      displayConditionnalFormatting: true,
       hideUpdate: false,
       isUpdating: false,
     };
@@ -161,11 +163,17 @@ class App extends Component<{}, AppState> {
         return (
           <ReportPage
             useErrorForReferential={this.state.useErrorForReferential}
+            displayConditionnalFormatting={this.state.displayConditionnalFormatting}
             appConfiguration={configuration}
             groupedData={this.state.currentModel}
             onUseErrorForReferencial={() =>
               this.setState({
                 useErrorForReferential: !this.state.useErrorForReferential,
+              })
+            }
+            onUseConditionnalFormatting={() =>
+              this.setState({
+                displayConditionnalFormatting: !this.state.displayConditionnalFormatting,
               })
             }
           />
