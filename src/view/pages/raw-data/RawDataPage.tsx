@@ -53,7 +53,7 @@ class RawDatePage extends Component<RawDatePageProps, IRawDatePageStates> {
         key={group.name}
         className={group.name === selectedGroupName ? "is-active" : ""}
       >
-        <a href="/#" onClick={() => this.handleTabSelection(group)}>
+        <a href="/#" onClick={() => this.handleTabSelection(group)} className={group.measures.some(measure => !measure.ignored) ? "" : "line-through"}>
           {group.name}
         </a>
       </li>
