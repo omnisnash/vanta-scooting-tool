@@ -176,7 +176,7 @@ class ReportPage extends Component<ReportPageProps, ReportPageStates> {
             <button
               className={
                 "button " +
-                (useConditionnalFormatting ? "is-link" : "is-outlined")
+                (useConditionnalFormatting ? "is-info" : "is-outlined")
               }
               onClick={this.props.onUseConditionnalFormatting}
             >
@@ -189,7 +189,7 @@ class ReportPage extends Component<ReportPageProps, ReportPageStates> {
             </button>
             <button
               className={
-                "button " + (useErrorForReferential ? "is-link" : "is-outlined")
+                "button " + (useErrorForReferential ? "is-info" : "is-outlined")
               }
               onClick={this.props.onUseErrorForReferencial}
               disabled={!useConditionnalFormatting}

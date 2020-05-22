@@ -26,7 +26,7 @@ function NavigationBar(props: NavigationBarProps) {
         <div className="field has-addons buttons are-large">
           <p className="control">
             <button
-              className={"button " + (props.currentPage === PagesView.IMPORT ? "is-info" : "")}
+              className={"button " + (props.currentPage === PagesView.IMPORT ? "is-success" : "")}
               onClick={() => props.onPageSelected(PagesView.IMPORT)}
             >
               <span className="icon is-small">
@@ -37,7 +37,7 @@ function NavigationBar(props: NavigationBarProps) {
           </p>
           <p className="control">
             <button
-              className={"button " + (props.currentPage === PagesView.HISTORY ? "is-info" : "")}
+              className={"button " + (props.currentPage === PagesView.HISTORY ? "is-success" : "")}
               onClick={() => props.onPageSelected(PagesView.HISTORY)}
             >
               <span className="icon is-small">
@@ -51,7 +51,7 @@ function NavigationBar(props: NavigationBarProps) {
         <div className="field has-addons buttons are-large">
           <p className="control">
             <button
-              className={"button " + (props.currentPage === PagesView.RAW ? "is-info" : "")}
+              className={"button " + (props.currentPage === PagesView.RAW ? "is-success" : "")}
               onClick={() => props.onPageSelected(PagesView.RAW)}
               disabled={!props.enableDataAndReport}
             >
@@ -63,7 +63,7 @@ function NavigationBar(props: NavigationBarProps) {
           </p>
           <p className="control">
             <button
-              className={"button " + (props.currentPage === PagesView.REPORT ? "is-info" : "")}
+              className={"button " + (props.currentPage === PagesView.REPORT ? "is-success" : "")}
               onClick={() => props.onPageSelected(PagesView.REPORT)}
               disabled={!props.enableDataAndReport}
             >
