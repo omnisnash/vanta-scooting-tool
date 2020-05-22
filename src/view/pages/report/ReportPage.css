@@ -92,7 +92,7 @@ td[data-referential="B"] {
   background: #f8ea6b;
 }
 
-td [data-referential="C"] {
+td[data-referential="C"] {
   background: #fcac73;
   color: #66320f;
 }
