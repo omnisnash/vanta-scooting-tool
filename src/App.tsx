@@ -16,6 +16,7 @@ import RawDatePage from "./view/pages/raw-data/RawDataPage";
 import ReportPage from "./view/pages/report/ReportPage";
 import UpdateNotification from "./view/components/notification/Notification";
 import * as serviceWorker from "./serviceWorker";
+import HelpPage from "./view/pages/help/HelpPage";
 
 interface AppState {
   currentPage: PagesView;
@@ -181,6 +182,8 @@ class App extends Component<{}, AppState> {
             }
           />
         );
+      case PagesView.HELP:
+        return <HelpPage/>
       default:
         return <p>Not Implemented Yet !</p>;
     }
