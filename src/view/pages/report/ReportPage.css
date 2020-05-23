@@ -25,7 +25,8 @@
   box-shadow: inset 0px 0px 9999px rgb(236, 236, 236);
 }
 
-#report-table-container th, #report-table-container td {
+#report-table-container th,
+#report-table-container td {
   text-align: center !important;
   vertical-align: middle !important;
   min-width: 100px;
@@ -121,8 +122,14 @@ td[data-referential="D"] {
   column-gap: 5px;
 }
 
-.report-button .button {
-  margin-left: 5px;
+.report-buttons .field {
+  margin-right: 14px;
+  padding-right: 14px;
+  margin-bottom: 0;
+}
+
+.report-buttons .field:not(:last-child) {
+  border-right: 1px solid lightgray;
 }
 
 #report-table {
@@ -130,7 +137,7 @@ td[data-referential="D"] {
 }
 
 .report-container .preview {
-  max-height: 40vh
+  max-height: 40vh;
 }
 
 .report-container .modal-card-foot {

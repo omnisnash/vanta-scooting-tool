@@ -2,17 +2,15 @@ import React, { Component } from "react";
 import "./ReportPage.css";
 import AggregatedData from "../../../models/AggregatedData";
 import AppConfiguration, { ReferentialPerValue } from "../../../models/Config";
-import {
-  faToggleOff,
-  faToggleOn,
-  faDownload,
-  faFileExport,
-} from "@fortawesome/free-solid-svg-icons";
+import { faDownload, faFileExport } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import GroupedData from "../../../models/GroupedData";
 import getAggregatedData from "../../../helpers/AggragationHelper";
 import html2canvas from "html2canvas";
-import { setScrollPosition, getStoredScrollPosition } from "../../../helpers/LocalStorageHelper";
+import {
+  setScrollPosition,
+  getStoredScrollPosition,
+} from "../../../helpers/LocalStorageHelper";
 
 const SCROLL_ID = "report-table";
 
@@ -75,7 +73,10 @@ class ReportPage extends Component<ReportPageProps, ReportPageStates> {
       return;
     }
 
-    setScrollPosition(SCROLL_ID, {top: tableContainer.scrollTop, left: tableContainer.scrollLeft});
+    setScrollPosition(SCROLL_ID, {
+      top: tableContainer.scrollTop,
+      left: tableContainer.scrollLeft,
+    });
   }
 
   componentDidUpdate() {
@@ -89,7 +90,7 @@ class ReportPage extends Component<ReportPageProps, ReportPageStates> {
 
       if (!tableContainer || !table) {
         this.setState({ exportStatus: ExportStatus.ERROR });
-        console.error("Table or table container were not found.")
+        console.error("Table or table container were not found.");
         return;
       }
 
@@ -178,8 +179,8 @@ class ReportPage extends Component<ReportPageProps, ReportPageStates> {
         )}
         <div className="report-header">
           <div className="report-title">
-            <h1 className="title">{aggregatedData.name}</h1>
-            <h2 className="subtitle project-info is-small">
+            <h5 className="title is-5">{aggregatedData.name}</h5>
+            <h6 className="subtitle project-info is-small">
               <div className="field is-grouped is-grouped-multiline">
                 <div className="control">
                   <div className="tags has-addons">
@@ -199,39 +200,38 @@ class ReportPage extends Component<ReportPageProps, ReportPageStates> {
                   </div>
                 </div>
               </div>
-            </h2>
+            </h6>
           </div>
 
-          <div className="report-buttons buttons are-medium">
+          <div className="report-buttons">
+            <div className="field">
+              <input
+                id="conditionnalFormatting"
+                type="checkbox"
+                name="conditionnalFormatting"
+                className="switch is-medium is-info"
+                checked={useConditionnalFormatting}
+                onClick={this.props.onUseConditionnalFormatting}
+              />
+              <label htmlFor="conditionnalFormatting">Coloration</label>
+            </div>
+            <div className="field">
+              <input
+                id="useError"
+                type="checkbox"
+                name="useError"
+                className="switch is-medium is-info"
+                checked={useErrorForReferential}
+                disabled={!useConditionnalFormatting}
+                onClick={this.props.onUseErrorForReferencial}
+              />
+              <label htmlFor="useError">Utiliser l'erreur</label>
+            </div>
+
             <button
-              className={
-                "button " +
-                (useConditionnalFormatting ? "is-info" : "is-outlined")
-              }
-              onClick={this.props.onUseConditionnalFormatting}
+              className={"button is-medium"}
+              onClick={this.exportReportAsImage}
             >
-              <span className="icon is-small">
-                <FontAwesomeIcon
-                  icon={useConditionnalFormatting ? faToggleOn : faToggleOff}
-                />
-              </span>
-              <span>Coloration</span>
-            </button>
-            <button
-              className={
-                "button " + (useErrorForReferential ? "is-info" : "is-outlined")
-              }
-              onClick={this.props.onUseErrorForReferencial}
-              disabled={!useConditionnalFormatting}
-            >
-              <span className="icon is-small">
-                <FontAwesomeIcon
-                  icon={useErrorForReferential ? faToggleOn : faToggleOff}
-                />
-              </span>
-              <span>Utliser l'erreur</span>
-            </button>
-            <button className={"button"} onClick={this.exportReportAsImage}>
               <span className="icon is-small">
                 <FontAwesomeIcon icon={faFileExport} />
               </span>

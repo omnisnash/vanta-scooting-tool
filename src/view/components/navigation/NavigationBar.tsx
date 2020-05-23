@@ -99,7 +99,10 @@ function NavigationBar(props: NavigationBarProps) {
           </button>
           {
             <button
-              className="button"
+            className={
+              "button " +
+              (props.currentPage === PagesView.HELP ? "is-success" : "")
+            }
               onClick={() => props.onPageSelected(PagesView.HELP)}
             >
               <span className="icon is-small">

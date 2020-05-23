@@ -6,7 +6,10 @@ import GroupedData, {
 } from "../../../models/GroupedData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBan } from "@fortawesome/free-solid-svg-icons";
-import { getStoredScrollPosition, setScrollPosition } from "../../../helpers/LocalStorageHelper";
+import {
+  getStoredScrollPosition,
+  setScrollPosition,
+} from "../../../helpers/LocalStorageHelper";
 
 const SCROLL_ID = "raw-table";
 
@@ -57,7 +60,10 @@ class RawDatePage extends Component<RawDatePageProps, IRawDatePageStates> {
       return;
     }
 
-    setScrollPosition(SCROLL_ID, {top: tableContainer.scrollTop, left: tableContainer.scrollLeft});
+    setScrollPosition(SCROLL_ID, {
+      top: tableContainer.scrollTop,
+      left: tableContainer.scrollLeft,
+    });
   }
 
   render() {
@@ -83,7 +89,15 @@ class RawDatePage extends Component<RawDatePageProps, IRawDatePageStates> {
         key={group.name}
         className={group.name === selectedGroupName ? "is-active" : ""}
       >
-        <a href="/#" onClick={() => this.handleTabSelection(group)} className={group.measures.some(measure => !measure.ignored) ? "" : "line-through"}>
+        <a
+          href="/#"
+          onClick={() => this.handleTabSelection(group)}
+          className={
+            group.measures.some((measure) => !measure.ignored)
+              ? ""
+              : "line-through"
+          }
+        >
           {group.name}
         </a>
       </li>
@@ -91,7 +105,7 @@ class RawDatePage extends Component<RawDatePageProps, IRawDatePageStates> {
 
     return (
       <div className="raw-data-container">
-        <h1 className="title">{this.props.groupedData.name}</h1>
+        <h5 className="title is-5">{this.props.groupedData.name}</h5>
         <div className="tabs is-toggle is-fullwidth is-large">
           <ul>{tabs}</ul>
         </div>

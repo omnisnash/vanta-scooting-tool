@@ -10,6 +10,7 @@
     "@types/react": "^16.9.34",
     "@types/react-dom": "^16.9.7",
     "bulma": "^0.8.2",
+    "bulma-switch": "^2.0.0",
     "html2canvas": "^1.0.0-rc.5",
     "http-server": "^0.12.3",
     "react": "^16.13.1",

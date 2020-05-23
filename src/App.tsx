@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import NavigationBar from "./view/components/navigation/NavigationBar";
 import "./App.css";
-import "bulma/css/bulma.css";
+import "bulma/css/bulma.min.css";
+import "bulma-switch/dist/css/bulma-switch.min.css";
 import GroupedData from "./models/GroupedData";
 import ImportationPage from "./view/pages/importation/ImportationPage";
 import PagesView from "./models/PageViews";
