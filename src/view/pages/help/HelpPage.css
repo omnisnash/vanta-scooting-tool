@@ -1,0 +1,25 @@
+.help-container {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+#help-section-container {
+  overflow: auto;
+  flex: 1;
+  border: 1px solid lightgrey;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.help-container .credit {
+  color: gray;
+  font-size: 0.8em;
+}
+
+.help-container .icon {
+  padding: 0 15px;
+}

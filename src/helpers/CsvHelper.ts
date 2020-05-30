@@ -21,6 +21,8 @@ interface ElementStructure {
   errorColumnIndex: number;
 }
 
+const DEFAULT_UNNAMED_GROUP = "Sans nom";
+
 const KEY_ID = "Reading #";
 const KEY_METHOD = "Method Name";
 const KEY_ELEVATION = "Elevation";
@@ -203,7 +205,8 @@ export function measuresFromCsv(csvContent: string): MeasureGroup[] {
 
   for (let i = csvStructure.contentStartRowIndex; i < csvLines.length; i++) {
     const measure = parseLine(csvLines[i], csvStructure);
-    getGroupOrDefault(measure.group).push(measure);
+    const groupName = measure.group ? measure.group : DEFAULT_UNNAMED_GROUP;
+    getGroupOrDefault(groupName).push(measure);
   }
 
   const measureGroup: MeasureGroup[] = [];

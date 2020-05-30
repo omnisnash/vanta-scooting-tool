@@ -2,25 +2,115 @@ import React, { Component } from "react";
 import "./ReportPage.css";
 import AggregatedData from "../../../models/AggregatedData";
 import AppConfiguration, { ReferentialPerValue } from "../../../models/Config";
-import { faToggleOff, faToggleOn } from "@fortawesome/free-solid-svg-icons";
+import { faDownload, faFileExport } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import GroupedData from "../../../models/GroupedData";
 import getAggregatedData from "../../../helpers/AggragationHelper";
+import html2canvas from "html2canvas";
+import {
+  setScrollPosition,
+  getStoredScrollPosition,
+} from "../../../helpers/LocalStorageHelper";
+
+const SCROLL_ID = "report-table";
 
 interface ReportPageProps {
   onUseErrorForReferencial: () => void;
+  onUseConditionnalFormatting: () => void;
   groupedData?: GroupedData;
   appConfiguration: AppConfiguration;
   useErrorForReferential?: boolean;
+  displayConditionnalFormatting?: boolean;
 }
 
-interface ReportPageStates {}
+enum ExportStatus {
+  NONE,
+  IN_PROGRESS,
+  DONE,
+  ERROR,
+}
+
+interface ReportPageStates {
+  exportStatus: ExportStatus;
+}
 
 class ReportPage extends Component<ReportPageProps, ReportPageStates> {
+  private exportResult: HTMLCanvasElement | undefined;
+
   constructor(props: ReportPageProps) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      exportStatus: ExportStatus.NONE,
+    };
+  }
+
+  exportReportAsImage = () => {
+    this.setState({ exportStatus: ExportStatus.IN_PROGRESS });
+  };
+
+  componentDidMount() {
+    const tableContainer = document.getElementById("report-table-container");
+
+    if (!tableContainer) {
+      return;
+    }
+
+    const scrollPosition = getStoredScrollPosition(SCROLL_ID);
+
+    if (!scrollPosition) {
+      return;
+    }
+
+    tableContainer.scrollLeft = scrollPosition.left;
+    tableContainer.scrollTop = scrollPosition.top;
+  }
+
+  componentWillUnmount() {
+    const tableContainer = document.getElementById("report-table-container");
+
+    if (!tableContainer) {
+      return;
+    }
+
+    setScrollPosition(SCROLL_ID, {
+      top: tableContainer.scrollTop,
+      left: tableContainer.scrollLeft,
+    });
+  }
+
+  componentDidUpdate() {
+    // Handle table exportation
+    if (this.state.exportStatus === ExportStatus.IN_PROGRESS) {
+      const tableContainer = document.getElementById("report-table-container");
+      const table = document.getElementById("report-table");
+
+      // We need to set the scroll to 0, else a transparent white background appear on the exported image
+      let containerScrollLeft: number, containerScrollTop: number;
+
+      if (!tableContainer || !table) {
+        this.setState({ exportStatus: ExportStatus.ERROR });
+        console.error("Table or table container were not found.");
+        return;
+      }
+
+      tableContainer.scrollTop = 0;
+      tableContainer.scrollLeft = 0;
+
+      html2canvas(table)
+        .then((canvas) => {
+          this.exportResult = canvas;
+
+          tableContainer.scrollTop = containerScrollTop;
+          tableContainer.scrollLeft = containerScrollLeft;
+
+          this.setState({ exportStatus: ExportStatus.DONE });
+        })
+        .catch((error) => {
+          console.error(error);
+          this.setState({ exportStatus: ExportStatus.ERROR });
+        });
+    }
   }
 
   render() {
@@ -66,19 +156,31 @@ class ReportPage extends Component<ReportPageProps, ReportPageStates> {
           <ElementPerGroupTd
             aggregatedData={aggregatedData}
             element={element}
+            displayConditionnalFormatting={
+              this.props.displayConditionnalFormatting
+            }
           />
         </tr>
       );
     });
 
     const useErrorForReferential = this.props.useErrorForReferential;
+    const useConditionnalFormatting = this.props.displayConditionnalFormatting;
 
     return (
       <div className="report-container">
+        {this.state.exportStatus !== ExportStatus.NONE && (
+          <ExportModal
+            onClose={() => this.setState({ exportStatus: ExportStatus.NONE })}
+            canvas={this.exportResult}
+            exportStatus={this.state.exportStatus}
+            fileName={aggregatedData.name}
+          />
+        )}
         <div className="report-header">
           <div className="report-title">
-            <h1 className="title">{aggregatedData.name}</h1>
-            <h2 className="subtitle project-info is-small">
+            <h5 className="title is-5">{aggregatedData.name}</h5>
+            <h6 className="subtitle project-info is-small">
               <div className="field is-grouped is-grouped-multiline">
                 <div className="control">
                   <div className="tags has-addons">
@@ -98,29 +200,55 @@ class ReportPage extends Component<ReportPageProps, ReportPageStates> {
                   </div>
                 </div>
               </div>
-            </h2>
+            </h6>
           </div>
 
           <div className="report-buttons">
+            <div className="field">
+              <input
+                id="conditionnalFormatting"
+                type="checkbox"
+                name="conditionnalFormatting"
+                className="switch is-medium is-info"
+                checked={useConditionnalFormatting}
+                onClick={this.props.onUseConditionnalFormatting}
+              />
+              <label htmlFor="conditionnalFormatting">Coloration</label>
+            </div>
+            <div className="field">
+              <input
+                id="useError"
+                type="checkbox"
+                name="useError"
+                className="switch is-medium is-info"
+                checked={useErrorForReferential}
+                disabled={!useConditionnalFormatting}
+                onClick={this.props.onUseErrorForReferencial}
+              />
+              <label htmlFor="useError">Utiliser l'erreur</label>
+            </div>
+
             <button
-              className={
-                "button is-medium " +
-                (useErrorForReferential ? "is-link" : "is-outlined")
-              }
-              onClick={this.props.onUseErrorForReferencial}
+              className={"button is-medium"}
+              onClick={this.exportReportAsImage}
             >
               <span className="icon is-small">
-                <FontAwesomeIcon
-                  icon={useErrorForReferential ? faToggleOn : faToggleOff}
-                />
+                <FontAwesomeIcon icon={faFileExport} />
               </span>
-              <span>Utliser l'erreur</span>
+              <span>Exporter</span>
             </button>
           </div>
         </div>
 
-        <div className={"report-table-container"}>
-          <table className="table is-bordered is-fullwidth">
+        <div
+          id={"report-table-container"}
+          className={
+            this.state.exportStatus === ExportStatus.NONE
+              ? "enabled-sticky"
+              : ""
+          }
+        >
+          <table id="report-table" className="table is-bordered is-fullwidth">
             <thead>
               <tr>
                 <th></th>
@@ -163,6 +291,7 @@ function ReferencialValuesTd(props: { values?: ReferentialPerValue | null }) {
 function ElementPerGroupTd(props: {
   aggregatedData: AggregatedData;
   element: string;
+  displayConditionnalFormatting?: boolean;
 }) {
   const measurePerGroup = props.aggregatedData.aggregatedgroups.map((group) => {
     const concentration = group.concentrations.find(
@@ -182,11 +311,15 @@ function ElementPerGroupTd(props: {
       <td
         key={group.id}
         className={
-          concentration?.closeToNextReferential
+          concentration?.closeToNextReferential &&
+          props.displayConditionnalFormatting
             ? "is-near-next-referential"
             : ""
         }
-        data-referential={concentration?.associatedReferential}
+        data-referential={
+          props.displayConditionnalFormatting &&
+          concentration?.associatedReferential
+        }
       >
         <b>
           <span className={style}>{value}</span>
@@ -200,6 +333,66 @@ function ElementPerGroupTd(props: {
   });
 
   return <React.Fragment>{measurePerGroup}</React.Fragment>;
+}
+
+interface ExportModalProps {
+  onClose: () => void;
+  canvas?: HTMLCanvasElement;
+  exportStatus: ExportStatus;
+  fileName: string;
+}
+
+function ExportModal(props: ExportModalProps) {
+  return (
+    <div className="modal is-active">
+      <div className="modal-background"></div>
+      <div className="modal-card">
+        <header className="modal-card-head">
+          <p className="modal-card-title">Exporter le rapport</p>
+        </header>
+        <section className="modal-card-body">
+          {props.exportStatus === ExportStatus.IN_PROGRESS && (
+            <div>
+              <button className="button is-loading is-fullwidth is-large"></button>
+            </div>
+          )}
+
+          {props.exportStatus === ExportStatus.DONE && props.canvas && (
+            <div className={"preview"}>
+              <img src={props.canvas.toDataURL()} alt={"Export"} />
+            </div>
+          )}
+
+          {(props.exportStatus === ExportStatus.ERROR ||
+            (props.exportStatus === ExportStatus.DONE && !props.canvas)) && (
+            <p>Erreur lors de l'exportation</p>
+          )}
+        </section>
+        <footer className="modal-card-foot">
+          <button
+            className="button is-large"
+            onClick={props.onClose}
+            disabled={props.exportStatus === ExportStatus.IN_PROGRESS}
+          >
+            Fermer
+          </button>
+          {props.exportStatus === ExportStatus.DONE && props.canvas && (
+            <a
+              download={props.fileName + ".jpg"}
+              href={props.canvas.toDataURL("image/jpeg")}
+            >
+              <button className={"button is-large is-info"}>
+                <span className="icon is-small">
+                  <FontAwesomeIcon icon={faDownload} />
+                </span>
+                <span>Enregistrer l'image</span>
+              </button>
+            </a>
+          )}
+        </footer>
+      </div>
+    </div>
+  );
 }
 
 export default ReportPage;

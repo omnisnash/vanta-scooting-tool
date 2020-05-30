@@ -49,7 +49,7 @@ function HistoryItem(props: HistoryItemProps) {
       </td>
       <td>
         <button
-          className={"button is-link is-large"}
+          className={"button is-info is-large"}
           onClick={props.onImportModel}
         >
           Importer

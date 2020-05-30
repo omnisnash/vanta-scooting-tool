@@ -146,7 +146,7 @@ class ImportationPage extends Component<ImportProps, ImportStates> {
           </div>
           <button
             className={
-              "button is-link is-large is-fullwidth " +
+              "button is-info is-large is-fullwidth " +
               (this.state.importInProgress ? "is-loading" : "")
             }
             disabled={this.state.importInProgress}
