@@ -85,25 +85,26 @@ class ReportPage extends Component<ReportPageProps, ReportPageStates> {
       const tableContainer = document.getElementById("report-table-container");
       const table = document.getElementById("report-table");
 
-      // We need to set the scroll to 0, else a transparent white background appear on the exported image
-      let containerScrollLeft: number, containerScrollTop: number;
-
       if (!tableContainer || !table) {
         this.setState({ exportStatus: ExportStatus.ERROR });
         console.error("Table or table container were not found.");
         return;
       }
 
+      let containerScrollLeft: number = tableContainer.scrollTop;
+      let containerScrollTop: number = tableContainer.scrollLeft;
+
+      // We need to set the scroll to 0, else a transparent white background appear on the exported image
       tableContainer.scrollTop = 0;
       tableContainer.scrollLeft = 0;
 
-      html2canvas(table)
+      html2canvas(table, {width: table.scrollWidth + 25})
         .then((canvas) => {
           this.exportResult = canvas;
 
           tableContainer.scrollTop = containerScrollTop;
           tableContainer.scrollLeft = containerScrollLeft;
-
+          
           this.setState({ exportStatus: ExportStatus.DONE });
         })
         .catch((error) => {
