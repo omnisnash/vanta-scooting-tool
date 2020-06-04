@@ -1,6 +1,6 @@
 # Vanta Scooting tools
 
-A Progresive Wep App used for parsing Vanta tools CSV and displaying formated values.
+A Progresive Wep App, optimised for tablet, used for parsing Vanta tool CSV output (encoded as windows-1252) and displaying formated values.
 
 Expected headers:
 

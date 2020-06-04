@@ -4,6 +4,7 @@ enum PagesView {
   RAW,
   REPORT,
   SETTINGS,
+  HELP
 }
 
 export default PagesView;

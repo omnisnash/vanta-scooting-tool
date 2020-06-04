@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import NavigationBar from "./view/components/navigation/NavigationBar";
 import "./App.css";
-import "bulma/css/bulma.css";
+import "bulma/css/bulma.min.css";
+import "bulma-switch/dist/css/bulma-switch.min.css";
 import GroupedData from "./models/GroupedData";
 import ImportationPage from "./view/pages/importation/ImportationPage";
 import PagesView from "./models/PageViews";
@@ -10,17 +11,20 @@ import {
   getStoredAppHistory,
   addMeasurerToHistory,
   getStoredAppConfiguration,
+  resetScrollPositions,
 } from "./helpers/LocalStorageHelper";
 import RawDatePage from "./view/pages/raw-data/RawDataPage";
 import ReportPage from "./view/pages/report/ReportPage";
 import UpdateNotification from "./view/components/notification/Notification";
 import * as serviceWorker from "./serviceWorker";
+import HelpPage from "./view/pages/help/HelpPage";
 
 interface AppState {
   currentPage: PagesView;
   currentModel?: GroupedData;
   isFullScreen: boolean;
   useErrorForReferential: boolean;
+  displayConditionnalFormatting: boolean;
   selectedGroup?: string;
   updateAvalaible?: boolean;
   hideUpdate: boolean;
@@ -36,6 +40,7 @@ class App extends Component<{}, AppState> {
       currentPage: PagesView.IMPORT,
       isFullScreen: false,
       useErrorForReferential: true,
+      displayConditionnalFormatting: true,
       hideUpdate: false,
       isUpdating: false,
     };
@@ -61,6 +66,8 @@ class App extends Component<{}, AppState> {
   };
 
   handleGroupedDataImport = (model: GroupedData) => {
+    resetScrollPositions();
+    
     this.setState({
       currentModel: model,
       currentPage: PagesView.RAW,
@@ -161,6 +168,7 @@ class App extends Component<{}, AppState> {
         return (
           <ReportPage
             useErrorForReferential={this.state.useErrorForReferential}
+            displayConditionnalFormatting={this.state.displayConditionnalFormatting}
             appConfiguration={configuration}
             groupedData={this.state.currentModel}
             onUseErrorForReferencial={() =>
@@ -168,8 +176,15 @@ class App extends Component<{}, AppState> {
                 useErrorForReferential: !this.state.useErrorForReferential,
               })
             }
+            onUseConditionnalFormatting={() =>
+              this.setState({
+                displayConditionnalFormatting: !this.state.displayConditionnalFormatting,
+              })
+            }
           />
         );
+      case PagesView.HELP:
+        return <HelpPage/>
       default:
         return <p>Not Implemented Yet !</p>;
     }

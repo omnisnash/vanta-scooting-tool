@@ -6,6 +6,12 @@ import GroupedData, {
 } from "../../../models/GroupedData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBan } from "@fortawesome/free-solid-svg-icons";
+import {
+  getStoredScrollPosition,
+  setScrollPosition,
+} from "../../../helpers/LocalStorageHelper";
+
+const SCROLL_ID = "raw-table";
 
 interface RawDatePageProps {
   onIgnoreMeasure: (group: string, id: number) => void;
@@ -30,6 +36,36 @@ class RawDatePage extends Component<RawDatePageProps, IRawDatePageStates> {
     this.setState({ selectedGroup: group });
   };
 
+  componentDidMount() {
+    const tableContainer = document.getElementById("measures-table-container");
+
+    if (!tableContainer) {
+      return;
+    }
+
+    const scrollPosition = getStoredScrollPosition(SCROLL_ID);
+
+    if (!scrollPosition) {
+      return;
+    }
+
+    tableContainer.scrollLeft = scrollPosition.left;
+    tableContainer.scrollTop = scrollPosition.top;
+  }
+
+  componentWillUnmount() {
+    const tableContainer = document.getElementById("measures-table-container");
+
+    if (!tableContainer) {
+      return;
+    }
+
+    setScrollPosition(SCROLL_ID, {
+      top: tableContainer.scrollTop,
+      left: tableContainer.scrollLeft,
+    });
+  }
+
   render() {
     if (!this.props.groupedData) {
       return (
@@ -53,7 +89,15 @@ class RawDatePage extends Component<RawDatePageProps, IRawDatePageStates> {
         key={group.name}
         className={group.name === selectedGroupName ? "is-active" : ""}
       >
-        <a href="/#" onClick={() => this.handleTabSelection(group)}>
+        <a
+          href="/#"
+          onClick={() => this.handleTabSelection(group)}
+          className={
+            group.measures.some((measure) => !measure.ignored)
+              ? ""
+              : "line-through"
+          }
+        >
           {group.name}
         </a>
       </li>
@@ -61,12 +105,12 @@ class RawDatePage extends Component<RawDatePageProps, IRawDatePageStates> {
 
     return (
       <div className="raw-data-container">
-        <h1 className="title">{this.props.groupedData.name}</h1>
+        <h5 className="title is-5">{this.props.groupedData.name}</h5>
         <div className="tabs is-toggle is-fullwidth is-large">
           <ul>{tabs}</ul>
         </div>
 
-        <div className="measures-table-container">
+        <div id="measures-table-container">
           <MeasuresTable
             groupName={selectedGroupName}
             measures={selectedGroup.measures}
