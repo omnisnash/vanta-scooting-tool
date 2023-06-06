@@ -2,6 +2,8 @@
 
 A Progresive Wep App, optimised for tablet, used for parsing Vanta tool CSV output (encoded as windows-1252) and displaying formated values.
 
+You can found an example of CSV file ini the `./examples` directory.
+
 Expected headers:
 
 ```
