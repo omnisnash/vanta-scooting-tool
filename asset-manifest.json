@@ -1,0 +1,28 @@
+{
+  "files": {
+    "main.css": "/vanta-scooting-tool/static/css/main.8790ea2c.chunk.css",
+    "main.js": "/vanta-scooting-tool/static/js/main.fec4d697.chunk.js",
+    "main.js.map": "/vanta-scooting-tool/static/js/main.fec4d697.chunk.js.map",
+    "runtime-main.js": "/vanta-scooting-tool/static/js/runtime-main.72d86b41.js",
+    "runtime-main.js.map": "/vanta-scooting-tool/static/js/runtime-main.72d86b41.js.map",
+    "static/css/2.82ceb22c.chunk.css": "/vanta-scooting-tool/static/css/2.82ceb22c.chunk.css",
+    "static/js/2.031abda5.chunk.js": "/vanta-scooting-tool/static/js/2.031abda5.chunk.js",
+    "static/js/2.031abda5.chunk.js.map": "/vanta-scooting-tool/static/js/2.031abda5.chunk.js.map",
+    "index.html": "/vanta-scooting-tool/index.html",
+    "precache-manifest.38b133652309d71c3c7e0c988053bf42.js": "/vanta-scooting-tool/precache-manifest.38b133652309d71c3c7e0c988053bf42.js",
+    "service-worker.js": "/vanta-scooting-tool/service-worker.js",
+    "static/css/2.82ceb22c.chunk.css.map": "/vanta-scooting-tool/static/css/2.82ceb22c.chunk.css.map",
+    "static/css/main.8790ea2c.chunk.css.map": "/vanta-scooting-tool/static/css/main.8790ea2c.chunk.css.map",
+    "static/js/2.031abda5.chunk.js.LICENSE.txt": "/vanta-scooting-tool/static/js/2.031abda5.chunk.js.LICENSE.txt",
+    "static/media/report_ref.jpg": "/vanta-scooting-tool/static/media/report_ref.37d0af67.jpg",
+    "static/media/report_ref_concentration.jpg": "/vanta-scooting-tool/static/media/report_ref_concentration.1e1eb54c.jpg",
+    "static/media/report_value.jpg": "/vanta-scooting-tool/static/media/report_value.90305e59.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.72d86b41.js",
+    "static/css/2.82ceb22c.chunk.css",
+    "static/js/2.031abda5.chunk.js",
+    "static/css/main.8790ea2c.chunk.css",
+    "static/js/main.fec4d697.chunk.js"
+  ]
+}
